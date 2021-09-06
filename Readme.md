@@ -13,6 +13,7 @@ Use CMAKE to compile.
 ## Usage
 
 A single argument indicating the path to the ROM file. 
+You can simply "Drag-and-drop" a ROM file onto the executable.
 (Several ROMS are included)
 
 ## Controls
@@ -33,4 +34,6 @@ QWER
 ASDF
 ZXCV
 ```
+
+Press `ESCAPE` at any time to quit.
 
