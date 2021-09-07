@@ -5,6 +5,7 @@ set(SDL_STATIC ON CACHE BOOL "" FORCE)
 set(SDL_SHARED OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/sdl)
 
+
 add_executable(Chip8
                 "src/main.cpp"
                 "src/Chip8.cpp"

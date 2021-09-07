@@ -1,3 +1,9 @@
+/**
+ * Copyright 2021 - Jacob R. Blomquist
+ * Original Author: Jacob R. Blomquist <BlomDev at gmail dot com>
+ * License: MIT
+ */
+
 #include <cstdio>
 #include <SDL.h>
 #include <fstream>
@@ -67,6 +73,7 @@ int SetupSDL(const char* pTitle, int pWidth, int pHeight)
 
 bool InitChip8(Chip8& pChip8, const char* pFileName)
 {
+	// load ROM file 
 	std::ifstream inFile(pFileName, std::ifstream::binary | std::ifstream::ate);
 	if (!inFile.is_open())
 	{
@@ -82,11 +89,11 @@ bool InitChip8(Chip8& pChip8, const char* pFileName)
 	inFile.read((char*)buffer, fileSize);
 	inFile.close();
 
-	pChip8.LoadRom(buffer, (uint32_t)fileSize);
-
+	bool ret = pChip8.LoadRom(buffer, (uint32_t)fileSize);
+	
 	delete[] buffer;
 
-	return 0;
+	return ret;
 }
 
 void MainLoop(Chip8& pChip8)

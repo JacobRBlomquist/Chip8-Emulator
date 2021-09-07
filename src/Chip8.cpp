@@ -1,3 +1,9 @@
+/**
+ * Copyright 2021 - Jacob R. Blomquist
+ * Original Author: Jacob R. Blomquist <BlomDev at gmail dot com>
+ * License: MIT
+ */
+
 #include "Chip8.hpp"
 #include <cstring>
 #include <cstdlib>
@@ -8,7 +14,6 @@ Chip8::Chip8()
 {
     //reset processor state
     ResetState();
-    lastTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 Chip8::~Chip8()
 {
@@ -16,6 +21,9 @@ Chip8::~Chip8()
 
 void Chip8::ResetState()
 {
+    // get current time in milliseconds since unix epoch
+    lastTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
     sp = 0;
     for (int i = 0; i < 16; i++)
     {
@@ -39,7 +47,7 @@ void Chip8::Cycle()
 
     //timers
     uint64_t currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    unprocessedTime += ((double)(currentTime - lastTime) / 1000.0);
+    unprocessedTime += ((double)(currentTime - lastTime) / 1000.0); 
     lastTime = currentTime;
 
     while (unprocessedTime >= secondsPer60Hz)
@@ -65,6 +73,7 @@ void Chip8::DecodeAndExecute(uint16_t pOpcode)
 {
     uint8_t highNibble = (pOpcode & 0xF000) >> 12;
 
+    // index into function table on the high nibble and call the respective function
     (this->*(FunctionTable[highNibble]))(pOpcode);
 }
 
@@ -96,7 +105,7 @@ bool Chip8::LoadRom(uint8_t *romData, uint32_t romSize)
     //load FONT
     std::memcpy(&memory[0x50], &font, 80);
 
-    return true;
+    return 0;
 }
 
 void Chip8::zeroGroup(uint16_t opcode)
@@ -361,7 +370,6 @@ void Chip8::drawDXYN(uint16_t opcode)
                     display[xPix + yPix * 64] = 1;
                 }
             }
-            
         }
     }
 }

@@ -4,11 +4,15 @@ Written in C++ By Jacob Reed Blomquist
 ## Compiling
 
 Use CMAKE to compile.
+Navigate to the top-level folder and run the following commands.
 
-`mkdir build`
-`cd build`
-`cmake ..`
-`cmake --build .`
+```shell
+$ mkdir build
+$ cd build
+$ cmake ..
+$ cmake --build .
+```
+Tested with VisualStudio 2019 and Unix Makefiles on Linux
 
 ## Usage
 

@@ -1,3 +1,10 @@
+/**
+ * Copyright 2021 - Jacob R. Blomquist
+ * Original Author: Jacob R. Blomquist <BlomDev at gmail dot com>
+ * License: MIT
+ */
+
+
 #ifndef CHIP8_HPP
 #define CHIP8_HPP
 #include <stdint.h>
@@ -8,33 +15,53 @@ public:
     Chip8();
     virtual ~Chip8();
 
+    // Decode and execute a single CPU cycle
     void Cycle();
+    // Load a ROM file 
     bool LoadRom(uint8_t *romData, uint32_t romSize);
+    // Set keyboard state (keycode is [0,15], state is 0 or 1)
     void SetKeyState(uint8_t keyCode, uint8_t state);
+    // get screen buffer (64x32 bytes, 1 = on, 0 = off)
     const uint8_t *GetScreen();
 
 private:
+    // Reset processor registers, memory, etc
     void ResetState();
+    // Fetch next instruction from Program Counter location
     uint16_t Fetch();
+    // Decode an opcode and execute it
     void DecodeAndExecute(uint16_t opcode);
 
 private:
+    // 16 element call stack
     uint16_t stack[16];
+    // Stack pointer
     uint16_t sp;
+    // 4K memory
     uint8_t memory[4096];
+    // 16 registers
     uint8_t V[16];
+    // program counter
     uint16_t PC;
+    // index register (for memory locations)
     uint16_t I;
+    // delay timer. Counts down at 60hz until zero
     uint8_t delay;
+    // keymap
     uint8_t keys[16];
+    // sound timer, counts down at 60hz until zero. plays tone when non-zero
     uint8_t sound;
+    // timer used to decrement sound and delay timers
     uint64_t lastTime;
-    double secondsPer60Hz = 1.0 / 60.0;
+    // constant for seconds per sound/delay tick
+    const double secondsPer60Hz = 1.0 / 60.0;
+    // used to accumulate time for sound/delay timers
     double unprocessedTime = 0;
 
-
+    //display buffer
     uint8_t display[64 * 32];
 
+    // 16 character font
     uint8_t font[80] = {
         0xF0, 0x90, 0x90, 0x90, 0xF0, //0
         0x20, 0x60, 0x20, 0x20, 0x70, //1
@@ -73,12 +100,20 @@ private:
         &Chip8::egroup,
         &Chip8::fgroup};
 
+    // opcodes that start at 0
     void zeroGroup(uint16_t opcode);
+    // clear screen
     void cls00E0(uint16_t opcode);
+    // return from function call
     void ret00EE(uint16_t opcode);
 
+    // jump to address NNN
     void jmp1NNN(uint16_t opcode);
+
+    // call function at NNN
     void call2NNN(uint16_t opcode);
+
+    
     void skip3XNN(uint16_t opcode);
     void skip4XNN(uint16_t opcode);
     void skip5XY0(uint16_t opcode);
