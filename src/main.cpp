@@ -128,7 +128,7 @@ void MainLoop(Chip8& pChip8)
 				}
 				break;
 			case SDL_KEYUP:
-				for (int i = 0; i < 0x16; i++)
+				for (int i = 0; i < 16; i++)
 				{
 					if (event.key.keysym.sym == chip8KeyMap[i])
 					{
