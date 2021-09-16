@@ -17,10 +17,10 @@ public:
 
     // Decode and execute a single CPU cycle
     void Cycle();
-    // Load a ROM file 
-    bool LoadRom(uint8_t *romData, uint32_t romSize);
+    // Load a ROM file - Returns 1 if an error occurred and 0 otherwise
+    bool LoadRom(uint8_t *pRomData, uint32_t pRomSize);
     // Set keyboard state (keycode is [0,15], state is 0 or 1)
-    void SetKeyState(uint8_t keyCode, uint8_t state);
+    void SetKeyState(uint8_t pKeyCode, uint8_t pState);
     // get screen buffer (64x32 bytes, 1 = on, 0 = off)
     const uint8_t *GetScreen();
 
@@ -30,7 +30,7 @@ private:
     // Fetch next instruction from Program Counter location
     uint16_t Fetch();
     // Decode an opcode and execute it
-    void DecodeAndExecute(uint16_t opcode);
+    void DecodeAndExecute(uint16_t pOpcode);
 
 private:
     // 16 element call stack
@@ -80,6 +80,7 @@ private:
         0xF0, 0x80, 0xF0, 0x80, 0xF0, //E
         0xF0, 0x80, 0xF0, 0x80, 0x80  //F
     };
+
 
     //function pointer table
     void (Chip8::*FunctionTable[16])(uint16_t) = {
