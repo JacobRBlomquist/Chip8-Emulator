@@ -1,3 +1,7 @@
+#ifndef CHIP_8_TEST_HPP
+#define CHIP_8_TEST_HPP
+
+
 //forward declare
 class Chip8;
 
@@ -18,3 +22,5 @@ private:
 private:
     Chip8 *gChip8;
 };
+
+#endif //CHIP_8_TEST_HPP

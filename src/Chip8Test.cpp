@@ -1,3 +1,4 @@
+#include "Chip8Test.hpp"
 #include "Chip8.hpp"
 #include <cstdio>
 

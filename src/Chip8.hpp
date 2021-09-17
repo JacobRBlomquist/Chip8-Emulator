@@ -8,7 +8,10 @@
 #ifndef CHIP8_HPP
 #define CHIP8_HPP
 #include <stdint.h>
-#include "Chip8Test.hpp"
+
+
+//forward declaration
+class Chip8Test;
 
 class Chip8
 {
