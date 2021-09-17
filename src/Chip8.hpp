@@ -8,6 +8,7 @@
 #ifndef CHIP8_HPP
 #define CHIP8_HPP
 #include <stdint.h>
+#include "Chip8Test.hpp"
 
 class Chip8
 {
@@ -23,6 +24,9 @@ public:
     void SetKeyState(uint8_t pKeyCode, uint8_t pState);
     // get screen buffer (64x32 bytes, 1 = on, 0 = off)
     const uint8_t *GetScreen();
+
+    //declare chip8Test as friend so it can access private members
+    friend class Chip8Test;
 
 private:
     // Reset processor registers, memory, etc

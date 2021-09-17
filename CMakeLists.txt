@@ -10,7 +10,11 @@ add_executable(Chip8
                 "src/main.cpp"
                 "src/Chip8.cpp"
                 "src/Platform.cpp"
-                )           
+                )         
+                
+add_executable(Chip8Test
+                "src/Chip8.cpp"
+                "src/Chip8Test.cpp")
 
 
 target_include_directories(Chip8 PUBLIC "$(CMAKE_SOURCE_DIR)/external/sdl/include")
