@@ -1,6 +1,7 @@
+#include <cstdio>
+#include <functional>
 #include "Chip8Test.hpp"
 #include "Chip8.hpp"
-#include <cstdio>
 
 Chip8Test::Chip8Test(Chip8 *pChip8)
 {
@@ -10,20 +11,31 @@ Chip8Test::~Chip8Test()
 {
 }
 
-bool Chip8Test::RunTests()
+void Chip8Test::RunTests()
 {
-    return Test1();
+    Run(&Chip8Test::Test1, "Test 1", "bad test");
+}
+
+void Chip8Test::Run(bool (Chip8Test::*pFunc)(), const char *pTestName, const char *pFailureMessage)
+{
+    bool res = std::invoke(pFunc, this);
+    if (res)
+    {
+        printf("TEST '%s': PASS\n", pTestName);
+    }
+    else
+    {
+        printf("TEST '%s': FAIL\n\t-> %s\n", pTestName, pFailureMessage);
+    }
 }
 
 bool Chip8Test::Test1()
 {
-    printf("PC: %d",gChip8->PC);
-
-    return true;
+    return gChip8->PC == 512;
 }
 
-
-int main(int argc, char** argv){
+int main(int argc, char **argv)
+{
     Chip8 c8;
 
     Chip8Test test(&c8);

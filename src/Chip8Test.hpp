@@ -1,7 +1,6 @@
 #ifndef CHIP_8_TEST_HPP
 #define CHIP_8_TEST_HPP
 
-
 //forward declare
 class Chip8;
 
@@ -14,9 +13,13 @@ public:
 public:
     // will return 0 if all tests pass.
     // Prints test results to stdout
-    bool RunTests();
+    void RunTests();
 
 private:
+    //Run a specific test based on function pointer.
+    // If test passes print pass, otherwise print fail.
+    void Run(bool (Chip8Test::*pFunc)(), const char *pTestName, const char *pFailureMessage);
+
     bool Test1();
 
 private:
