@@ -18,9 +18,12 @@ public:
 private:
     //Run a specific test based on function pointer.
     // If test passes print pass, otherwise print fail.
-    void Run(bool (Chip8Test::*pFunc)(), const char *pTestName, const char *pFailureMessage);
+    // returns true if test passes
+    bool Run(bool (Chip8Test::*pFunc)(), const char *pTestName, const char *pFailureMessage);
 
-    bool Test1();
+    bool TestLoadFont();
+    bool TestLoadRom();
+    bool TestFetch();
 
 private:
     Chip8 *gChip8;

@@ -31,6 +31,9 @@ void Chip8::ResetState()
         keys[i] = 0;
     }
 
+    //reset memory
+    memset(memory, 0,0x1000);
+
     for (int i = 0; i < 64 * 32; i++)
         display[i] = 0;
 
