@@ -22,7 +22,7 @@ You can simply "Drag-and-drop" a ROM file onto the executable.
 
 ## Controls
 
-The Original Chip8 Used the a layout of:
+The Original Chip8 Used the key layout of:
 
 ```
 123C
