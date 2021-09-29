@@ -1,43 +1,31 @@
 #include <cstdio>
 #include <functional>
+#include "minUnit.hpp"
 #include "Chip8Test.hpp"
 #include "Chip8.hpp"
 
-Chip8Test::Chip8Test(Chip8 *pChip8)
+int tests_run = 0;
+
+Chip8Test::Chip8Test()
 {
-    gChip8 = pChip8;
+    gChip8 = new Chip8();
 }
 Chip8Test::~Chip8Test()
 {
+    delete gChip8;
 }
 
-bool Chip8Test::Run(bool (Chip8Test::*pFunc)(), const char *pTestName, const char *pFailureMessage)
+char *Chip8Test::RunTests()
 {
-    bool res = std::invoke(pFunc, this);
-    if (res)
-    {
-        printf("TEST '%s':\tPASS\n", pTestName);
-        return true;
-    }
 
-    printf("TEST '%s':\tFAIL\n\t-> %s\n", pTestName, pFailureMessage);
-    return false;
+    mu_run_test(LoadROM);
+    mu_run_test(LoadFont);
+    mu_run_test(Fetch);
+
+    return 0;
 }
 
-void Chip8Test::RunTests()
-{
-    int total = 3;
-    int passed = 0;
-
-    Run(&Chip8Test::TestLoadFont, "Load Font", "Font Loading Failed") && passed++;
-    Run(&Chip8Test::TestLoadRom, "Load ROM", "ROM Loading Failed") && passed++;
-    Run(&Chip8Test::TestLoadRom, "Fetch", "Failed to fetch next opcode") && passed++;
-
-    printf("Passed %d of %d\n", passed, total);
-}
-
-// font is loaded when rom is loaded
-bool Chip8Test::TestLoadFont()
+char *Chip8Test::LoadFont()
 {
 
     uint8_t ROM[] = {0, 2};
@@ -45,46 +33,59 @@ bool Chip8Test::TestLoadFont()
     gChip8->LoadRom(ROM, (uint32_t)sizeof(ROM));
 
     //first and last byte
-    return (gChip8->memory[0x50] == 0xF0 && gChip8->memory[0x9f] == 0x80);
+    mu_assert("LoadFont - First byte of font is not 0xF0", gChip8->memory[0x50] == 0xF0);
+    mu_assert("LoadFont - Last byte of font is not 0x80", gChip8->memory[0x9F] == 0x80);
+
+    return 0;
 }
 
-bool Chip8Test::TestLoadRom()
+char *Chip8Test::LoadROM()
 {
+
     uint8_t ROM[] = {0xff, 0xaa, 0xdf, 0xfa, 0xac};
 
     gChip8->LoadRom(ROM, (uint32_t)sizeof(ROM));
+
     for (int i = 0; i < sizeof(ROM); i++)
     {
-        if (ROM[i] != gChip8->memory[0x200 + i])
-            return false;
+        mu_assert("LoadRom - Memory does not match ROM after loading.", ROM[i] == gChip8->memory[0x200 + i]);
     }
 
-    return true;
+    return 0;
 }
 
-bool Chip8Test::TestFetch()
+char *Chip8Test::Fetch()
 {
-    uint8_t ROM[]  {0xff, 0xaa, 0xdf, 0xfa, 0xac};
+    uint8_t ROM[]{0xff, 0xaa, 0xdf, 0xfa, 0xac};
 
-    gChip8->LoadRom(ROM,sizeof(ROM));
+    gChip8->LoadRom(ROM, sizeof(ROM));
 
     uint16_t opcode = gChip8->Fetch();
-    if(opcode!=0xffaa)
-        return false;
+    mu_assert("Fetch - Wrong Opcode", opcode == 0xffaa);
 
     opcode = gChip8->Fetch();
-     if(opcode!=0xdffa)
-        return false;
+    mu_assert("Fetch - Wrong Opcode", opcode == 0xdffa);
 
-    return true;
+    return 0;
 }
+
 
 int main(int argc, char **argv)
 {
-    Chip8 c8;
 
-    Chip8Test test(&c8);
-    test.RunTests();
+    Chip8Test test;
+    char *result = test.RunTests();
+
+    if (result != 0)
+    {
+        printf("%s\n", result);
+    }
+    else
+    {
+        printf("ALL TESTS PASSED\n");
+    }
+
+    printf("Tests Run: %d\n", tests_run);
 
     return 0;
 }

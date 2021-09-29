@@ -7,23 +7,17 @@ class Chip8;
 class Chip8Test
 {
 public:
-    Chip8Test(Chip8 *pChip8);
-    virtual ~Chip8Test();
-
+    Chip8Test();
+    ~Chip8Test();
 public:
     // will return 0 if all tests pass.
     // Prints test results to stdout
-    void RunTests();
+    char * RunTests();
 
 private:
-    //Run a specific test based on function pointer.
-    // If test passes print pass, otherwise print fail.
-    // returns true if test passes
-    bool Run(bool (Chip8Test::*pFunc)(), const char *pTestName, const char *pFailureMessage);
-
-    bool TestLoadFont();
-    bool TestLoadRom();
-    bool TestFetch();
+   char * LoadFont();
+   char * LoadROM();
+   char * Fetch();
 
 private:
     Chip8 *gChip8;
