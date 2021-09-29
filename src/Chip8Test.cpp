@@ -21,12 +21,16 @@ char *Chip8Test::RunTests()
     mu_run_test(LoadROM);
     mu_run_test(LoadFont);
     mu_run_test(Fetch);
+    mu_run_test(SetKeyState);
+    mu_run_test(JMP);
+    mu_run_test(Call);
 
     return 0;
 }
 
 char *Chip8Test::LoadFont()
 {
+    gChip8->ResetState();
 
     uint8_t ROM[] = {0, 2};
 
@@ -42,6 +46,7 @@ char *Chip8Test::LoadFont()
 char *Chip8Test::LoadROM()
 {
 
+    gChip8->ResetState();
     uint8_t ROM[] = {0xff, 0xaa, 0xdf, 0xfa, 0xac};
 
     gChip8->LoadRom(ROM, (uint32_t)sizeof(ROM));
@@ -56,6 +61,7 @@ char *Chip8Test::LoadROM()
 
 char *Chip8Test::Fetch()
 {
+    gChip8->ResetState();
     uint8_t ROM[]{0xff, 0xaa, 0xdf, 0xfa, 0xac};
 
     gChip8->LoadRom(ROM, sizeof(ROM));
@@ -69,6 +75,46 @@ char *Chip8Test::Fetch()
     return 0;
 }
 
+char *Chip8Test::SetKeyState()
+{
+    gChip8->ResetState();
+    gChip8->SetKeyState(3, 1);
+
+    mu_assert("Could not set keystate 3 to 1", gChip8->keys[3] == 1);
+
+    gChip8->SetKeyState(5, 1);
+
+    mu_assert("Could not set keystate 5 to 1", gChip8->keys[5] == 1);
+    gChip8->SetKeyState(6, 1);
+    mu_assert("Could not set keystate 6 to 1", gChip8->keys[6] == 1);
+    gChip8->SetKeyState(6, 0);
+    mu_assert("Could not set keystate 6 to 0", gChip8->keys[6] == 0);
+
+    return 0;
+}
+
+char *Chip8Test::JMP()
+{
+
+    gChip8->ResetState();
+
+    gChip8->jmp1NNN(0x1234);
+    mu_assert("JMP incorrect address", gChip8->PC == 0x234);
+
+    return 0;
+}
+
+char *Chip8Test::Call()
+{
+    gChip8->ResetState();
+
+    gChip8->call2NNN(0x2123);
+    mu_assert("Stack pointer is not 1", gChip8->sp == 1);
+    mu_assert("Wrong Stack Value", gChip8->stack[0] == 0x200);
+    mu_assert("PC is wrong", gChip8->PC == 0x123);
+
+    return 0;
+}
 
 int main(int argc, char **argv)
 {

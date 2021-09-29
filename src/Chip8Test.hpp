@@ -9,15 +9,19 @@ class Chip8Test
 public:
     Chip8Test();
     ~Chip8Test();
+
 public:
     // will return 0 if all tests pass.
     // Prints test results to stdout
-    char * RunTests();
+    char *RunTests();
 
 private:
-   char * LoadFont();
-   char * LoadROM();
-   char * Fetch();
+    char *LoadFont();
+    char *LoadROM();
+    char *Fetch();
+    char *SetKeyState();
+    char *JMP();
+    char *Call();
 
 private:
     Chip8 *gChip8;
